@@ -98,7 +98,21 @@
           drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
 
           /*  +++++++++++++++ BEGIN IMAGE PROCESSING +++++++++++++++ */
-          /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+           // get the picture from the first canvas 
+              var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+              var data = imageData.data; // different pixel values
+
+              // go through the pixels and remove red and green
+              for (var i = 0; i < data.length; i += 4) {
+                data[i] = 0;     // red to zero
+                data[i + 1] = 0; // green to zero
+                // the blue color (data[i + 2]) left the same
+                // the alpha (data[i + 3]) left the same
+              }
+
+              // Draw the blue-only image on the second canvas
+              context2.putImageData(imageData, 0, 0);
+
 
           /* PUT ANY CHANGES TO THE JAVASCRIPT HERE  */
           
@@ -142,6 +156,23 @@
         context.fillStyle = "black";
         context.fillText("Original image will go here", 10, 20);
       </script>
+<!-- Second canvas to display only the blue channel of the image -->
+<canvas id="dataCanvas" width="600" height="500" style="border:1px solid #d3d3d3; margin-top: 20px;"></canvas>
+
+<script>
+  // for the second canvas by ID
+  var canvas2 = document.getElementById('dataCanvas');
+
+  // to create the drawing for the second canvas
+  var context2 = canvas2.getContext("2d");
+
+  // label for the second canvas
+  context2.font = '20pt Calibri';
+  context2.fillStyle = "black";
+  context2.fillText("Blue channel will go here", 10, 20);
+</script>
+
+   
 
     </div><!-- /content -->
     <div data-role="footer" data-position="fixed">
